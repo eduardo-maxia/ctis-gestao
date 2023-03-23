@@ -11,6 +11,8 @@ import AlunosIndex from 'pages/alunos'
 import AlunosShow from 'pages/alunos/show'
 import Login from 'pages/login'
 import Axios from "axios";
+import TurmasCreate from 'pages/turmas/create'
+import Home from 'pages/home'
 
 function App() {
   const [auth, setAuth] = useState(false)
@@ -39,10 +41,11 @@ function App() {
           :
           <>
             {/* Authenticated */}
-            <Route path='/' element={<Base />} />
+            <Route path='/' element={<Home />} />
 
             <Route path='turmas' element={<Outlet />}>
               <Route index element={<TurmasIndex />} />
+              <Route path='create' element={<TurmasCreate />} />
               <Route path=':turma_id' element={<TurmasShow />} />
             </Route>
 

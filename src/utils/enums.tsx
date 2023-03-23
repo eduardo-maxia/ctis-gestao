@@ -19,15 +19,16 @@ export enum Dias {
 
 type TInput = {
   tipo: 'professor' | 'sede' | 'dias',
-  value: number,
-  onChange: (v: number) => void,
-  className?: string
+  value: string,
+  onChange: (v: string) => void,
+  className?: string,
+  disabled?: boolean
 }
-export function EnumPicker({ tipo, value, onChange, className = 'block w-full rounded-md border-0 pb-1.5' }: TInput) {
+export function EnumPicker({ tipo, value, onChange, className = 'block w-full rounded-md border-0 pb-1.5', disabled = false }: TInput) {
   function getOptionsByEnum(t: Object) {
     return <>
       {Object.values(t).filter((v) => isNaN(Number(v))).map((key, value) => (
-        <Select.Option key={value + 1} value={value + 1}>{key}</Select.Option>
+        <Select.Option key={value + 1} value={key}>{key}</Select.Option>
       )
       )}
     </>
@@ -49,7 +50,7 @@ export function EnumPicker({ tipo, value, onChange, className = 'block w-full ro
     }
   }
   return (
-    <Select value={value} onChange={onChange} className={className}>
+    <Select disabled={disabled} value={value} onChange={onChange} className={className}>
       {getOptions()}
     </Select>
   )
