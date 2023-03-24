@@ -1,21 +1,8 @@
 import { Select } from "antd"
 
-export enum Professor {
-  Arlen,
-  'André',
-  Iury
-}
-
-export enum Sede {
-  Arclo = 1,
-  'Viva Esportes' = 2
-}
-
-export enum Dias {
-  'Segunda e Quarta',
-  'Terça e Quinta',
-  'Outros'
-}
+export const Professor: ('Arlen' | 'André' | 'Iury')[] = ['Arlen', 'André', 'Iury']
+export const Sede: ('Arclo' | 'Viva Esportes')[] = ['Arclo', 'Viva Esportes']
+export const Dias: ('Segunda e Quarta' | 'Terça e Quinta' | 'Outros')[] = ['Segunda e Quarta', 'Terça e Quinta', 'Outros']
 
 type TInput = {
   tipo: 'professor' | 'sede' | 'dias',
@@ -25,9 +12,9 @@ type TInput = {
   disabled?: boolean
 }
 export function EnumPicker({ tipo, value, onChange, className = 'block w-full rounded-md border-0 pb-1.5', disabled = false }: TInput) {
-  function getOptionsByEnum(t: Object) {
+  function getOptionsByEnum(t: string[]) {
     return <>
-      {Object.values(t).filter((v) => isNaN(Number(v))).map((key, value) => (
+      {t.map((key, value) => (
         <Select.Option key={value + 1} value={key}>{key}</Select.Option>
       )
       )}

@@ -1,29 +1,30 @@
-import { DatePicker, Select, Checkbox, Input } from "antd";
+import { DatePicker, Select, Checkbox } from "antd";
 import { Field, Form, Formik, useField } from "formik";
 import { useState } from "react";
 import dayjs from "dayjs"
-import { useGetSchema, usePatch, usePost } from "utils/requests";
-import { useNavigate, useParams } from "react-router-dom";
-import { tAlunoShowSchema } from "schemas/schemas";
-import { cloneDeep } from "lodash";
-import { diff } from "deep-object-diff";
+import { usePost } from "utils/requests";
+import { useNavigate } from "react-router-dom";
 
-export default function AlunosShow() {
-  const { user_id } = useParams()
-  const { data } = useGetSchema('users/' + user_id, tAlunoShowSchema)
-  const { mutate, isLoading } = usePatch('users/' + user_id)
+export default function AlunosCreate() {
+  const { mutate, isLoading } = usePost('users')
   const navigate = useNavigate()
-  const [disabled, setDisabled] = useState(true)
-
   return (
     <div className="text-start">
-      {data && <Formik
-        initialValues={cloneDeep(data)}
+      <Formik
+        initialValues={{
+          telefone: '',
+          apelido: '',
+          responsavel_checked: false,
+          responsavel_nome: '',
+          responsavel_telefone: '',
+          data_inicio: dayjs(),
+          dia_vencimento: 5
+        }}
         onSubmit={(values) => {
-          mutate(diff(data, values), {
-            onSuccess: () => {
-              setDisabled(true);
-            }
+          mutate(values, {
+            onSuccess(data) {
+              navigate('/alunos/' + data.aluno_id)
+            },
           })
         }}
       >
@@ -36,12 +37,9 @@ export default function AlunosShow() {
                 <div className="overflow-hidden shadow sm:rounded-md">
                   <div className="bg-white px-4 py-5 sm:p-6">
                     <div className="grid grid-cols-6 gap-6">
-
-                      <button type='button' className="col-span-6" onClick={() => setDisabled(false)}>Editar</button>
-
                       <div className="col-span-6 sm:col-span-3">
                         <label className="block text-sm font-medium leading-6 text-gray-900">Telefone</label>
-                        <Field as={Input} type="text" name="telefone" id="telefone" disabled={disabled}
+                        <Field type="text" name="telefone" id="telefone"
                           className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 
                         />
@@ -49,21 +47,19 @@ export default function AlunosShow() {
 
                       <div className="col-span-6 sm:col-span-3">
                         <label className="block text-sm font-medium leading-6 text-gray-900">Apelido</label>
-                        <Field as={Input} type="text" name="apelido" id="apelido" disabled={disabled}
-                          className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <Field type="text" name="apelido" id="apelido" className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                       </div>
 
                       <Responsavel />
 
                       <div className="col-span-6 sm:col-span-3">
                         <label className="block text-sm font-medium leading-6 text-gray-900">Data início</label>
-                        <DatePicker onChange={d => setFieldValue('data_inicio', d?.toString())}
-                          value={dayjs(values.data_inicio || new Date())} disabled={disabled} />
+                        <DatePicker onChange={d => setFieldValue('data_inicio', d)} value={values.data_inicio} />
                       </div>
 
                       <div className="col-span-6 sm:col-span-3">
                         <label className="block text-sm font-medium leading-6 text-gray-900">Dia vencimento</label>
-                        <Select disabled={disabled} className="mt-2 block w-full rounded-md border-0 py-1.5"
+                        <Select className="mt-2 block w-full rounded-md border-0 py-1.5"
                           onChange={e => setFieldValue('dia_vencimento', e)} value={values.dia_vencimento}>
                           <Select.Option value={5}>5</Select.Option>
                           <Select.Option value={10}>10</Select.Option>
@@ -81,7 +77,7 @@ export default function AlunosShow() {
             </div>
           </Form>
         )}
-      </Formik>}
+      </Formik>
     </div >
   )
 }

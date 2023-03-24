@@ -75,9 +75,6 @@ export default function TurmasCreate() {
                 </div>
               </div>
             </div>
-            <button type="submit" disabled={isSubmitting}>
-              Submit
-            </button>
           </Form>
         )}
       </Formik>

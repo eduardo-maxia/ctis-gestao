@@ -13,6 +13,8 @@ import Login from 'pages/login'
 import Axios from "axios";
 import TurmasCreate from 'pages/turmas/create'
 import Home from 'pages/home'
+import Container from 'pages/container'
+import AlunosCreate from 'pages/alunos/create'
 
 function App() {
   const [auth, setAuth] = useState(false)
@@ -41,23 +43,26 @@ function App() {
           :
           <>
             {/* Authenticated */}
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={<Container />}>
+              <Route path='turmas' element={<Outlet />}>
+                <Route index element={<TurmasIndex />} />
+                <Route path='create' element={<TurmasCreate />} />
+                <Route path=':turma_id' element={<TurmasShow />} />
+              </Route>
 
-            <Route path='turmas' element={<Outlet />}>
-              <Route index element={<TurmasIndex />} />
-              <Route path='create' element={<TurmasCreate />} />
-              <Route path=':turma_id' element={<TurmasShow />} />
+              <Route path='alunos' element={<Outlet />}>
+                <Route index element={<AlunosIndex />} />
+                <Route path='create' element={<AlunosCreate />} />
+                <Route path=':user_id' element={<AlunosShow />} />
+              </Route>
+
+              <Route path='pagamentos' element={<Outlet />}>
+                <Route index element={<PagamentosIndex />} />
+                <Route path=':pagamento_id' element={<PagamentosShow />} />
+              </Route>
             </Route>
 
-            <Route path='alunos' element={<Outlet />}>
-              <Route index element={<AlunosIndex />} />
-              <Route path=':user_id' element={<AlunosShow />} />
-            </Route>
 
-            <Route path='pagamentos' element={<Outlet />}>
-              <Route index element={<PagamentosIndex />} />
-              <Route path=':pagamento_id' element={<PagamentosShow />} />
-            </Route>
           </>}
 
 
