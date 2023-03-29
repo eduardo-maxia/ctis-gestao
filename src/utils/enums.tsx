@@ -42,3 +42,4 @@ export function EnumPicker({ tipo, value, onChange, className = 'block w-full ro
     </Select>
   )
 }
+
