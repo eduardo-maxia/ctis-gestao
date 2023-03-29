@@ -4,14 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { z, ZodType } from "zod";
 
-export const FRONTEND_API_VERSION = '1.0.0'
-const defaults_urls: { [key: string]: string } = {
-    local: 'http://localhost:3082/',
-    // test: 'https://teste-api.maxia.education/professor/',
-    // comercial: 'https://exp-api.maxia.education/professor/',
-    // prod: 'https://api.maxia.education/professor/'
-}
-Axios.defaults.baseURL = defaults_urls[import.meta.env.VITE_APP_ENV];
+// Axios.defaults.baseURL = 'https://9397-2804-29b8-5161-c31-ec62-be2e-1308-db0.ngrok.io/'
+Axios.defaults.baseURL = import.meta.env.VITE_APP_ENV === 'local' ? 'http://localhost:3082/' : 'https://ctis-api.fly.dev/'
 
 export function useLogout() {
     const navigate = useNavigate();

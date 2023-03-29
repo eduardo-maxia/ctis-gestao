@@ -1,7 +1,9 @@
 import { Menu, MenuProps } from "antd";
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, MailOutlined, UserOutlined, TeamOutlined, HomeOutlined } from '@ant-design/icons';
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import './styles.scss'
+import { isMobile } from "react-device-detect";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -34,12 +36,11 @@ const items: MenuProps['items'] = [
   // ]),
 
   // { type: 'divider' },
-
-  getItem('Turmas', 'turmas', <SettingOutlined />),
+  getItem('Home', 'pagamentos', <HomeOutlined />),
   { type: 'divider' },
-  getItem('Alunos', 'alunos', <SettingOutlined />),
+  getItem('Turmas', 'turmas', <TeamOutlined />),
   { type: 'divider' },
-  getItem('Pagamentos', 'pagamentos', <SettingOutlined />),
+  getItem('Alunos', 'alunos', <UserOutlined />)
 ];
 
 export default function Container() {
@@ -47,18 +48,17 @@ export default function Container() {
   const onClick: MenuProps['onClick'] = (e) => {
     navigate('/' + e.key)
   };
-
   return (
-    <div className="w-screen h-screen flex">
+    <div className="w-screen h-screen flex ctis-container">
       <Menu
         onClick={onClick}
-        style={{ width: 256, paddingTop: 100 }}
-        // defaultSelectedKeys={['1']}
+        className='ctis-menu'
+        defaultSelectedKeys={['pagamentos']}
         // defaultOpenKeys={['sub1']}
-        mode="inline"
+        mode={isMobile ? "horizontal" : "inline"}
         items={items}
       />
-      <div className="flex-grow">
+      <div className={"flex-grow " + (isMobile ? 'px-5' : 'p-10') + ' pb-4'}>
         <Outlet />
       </div>
     </div>

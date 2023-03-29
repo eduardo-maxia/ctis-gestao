@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import reactLogo from 'assets/react.svg'
 import viteLogo from '/vite.svg'
-import 'App.scss'
+import './App.scss'
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
 import TurmasIndex from 'pages/turmas'
 import TurmasShow from 'pages/turmas/show'

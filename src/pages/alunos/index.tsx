@@ -1,31 +1,39 @@
-import { Button, List } from "antd"
+import { Button, Card, Input, List } from "antd"
+import { cloneDeep } from "lodash"
+import { useState } from "react"
 import { Link } from "react-router-dom"
 import { tAlunoIndexSchema } from "schemas/schemas"
+import { fuzzyStringMatcher } from "utils/general"
 import { useGetSchema } from "utils/requests"
 
 export default function AlunosIndex() {
-  const { data } = useGetSchema('users', tAlunoIndexSchema)
+  const { data, isFetching } = useGetSchema('users', tAlunoIndexSchema)
+  const [filtro, setFiltro] = useState('')
+  let filteredData = cloneDeep(data)?.filter(a => fuzzyStringMatcher(filtro, [a.apelido, a.name ?? '', a.responsavel_nome ?? '', a.telefone]))
+
   return (
-    <div>
-      Alunos INDEX
-      <br />
-      Filtros
+    <div className="">
+      <Input.Search placeholder="Busca avançada" onChange={e => setFiltro(e.target.value)}
+        style={{ width: 200 }} className="my-5" />
       <br />
 
+      {isFetching && <Card loading style={{ width: '100%' }}></Card>}
       {data &&
         <List
+          style={{
+            maxHeight: '80vh',
+            overflowY: 'auto'
+          }}
           itemLayout="horizontal"
-          dataSource={data}
+          dataSource={filteredData}
           renderItem={(aluno, index) => (
-            <List.Item>
+            <Card className="my-3">
               <Link to={aluno.id?.toString() || ''} className=''>
                 <>
-                  {aluno.apelido} |
-                  {aluno.name} |
-                  {aluno.telefone}
+                  {['Apelido: ' + aluno.apelido, 'Nome: ' + aluno.name, 'Telefone: ' + aluno.telefone].join('  |  ')}
                 </>
               </Link>
-            </List.Item>
+            </Card>
           )}
         />}
 

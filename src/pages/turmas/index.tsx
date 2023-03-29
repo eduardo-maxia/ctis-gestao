@@ -1,18 +1,62 @@
-import { Collapse, Avatar, List, Segmented, Button } from "antd"
+import { Collapse, List, Segmented, Button, Card } from "antd"
 import { tTurmaIndexSchema } from "schemas/schemas";
 import { useGetSchema } from "utils/requests"
-import dayjs from "dayjs"
 import { formatDate } from "utils/general";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { cloneDeep } from "lodash";
 
 
 export default function TurmasIndex() {
-  const { data } = useGetSchema('turmas', tTurmaIndexSchema)
+  const { data, isFetching } = useGetSchema('turmas', tTurmaIndexSchema)
+  const [filtroDias, setFiltroDias] = useState('')
+  const [filtroProfessor, setFiltroProfessor] = useState('')
+
+  let filteredData = cloneDeep(data)?.filter(t => filtroDias === '' || t.dia === filtroDias)
+  filteredData = filteredData?.filter(t => filtroProfessor === '' || t.professor === filtroProfessor)
+
   return (
-    <div>
-      Turmas INDEX
-      <br />
-      Filtros
+    <div className="">
+      <Segmented
+        options={[
+          {
+            label: (
+              <div style={{ padding: 4 }}>
+                <div>Todos</div>
+              </div>
+            ),
+            value: '',
+          },
+          {
+            label: (
+              <div style={{ padding: 4 }}>
+                <div>Segunda</div>
+                <div>e Quarta</div>
+              </div>
+            ),
+            value: 'Segunda e Quarta',
+          },
+          {
+            label: (
+              <div style={{ padding: 4 }}>
+                <div>Terça e</div>
+                <div>Quinta</div>
+              </div>
+            ),
+            value: 'Terça e Quinta',
+          },
+          {
+            label: (
+              <div style={{ padding: 4 }}>
+                <div>Outros</div>
+              </div>
+            ),
+            value: 'Outros',
+          },
+        ]}
+        className="my-5"
+        onChange={e => setFiltroDias(e.toString())}
+      />
       <br />
       <Segmented
         options={[
@@ -22,49 +66,49 @@ export default function TurmasIndex() {
                 <div>Todos</div>
               </div>
             ),
-            value: 'spring',
+            value: '',
           },
           {
             label: (
               <div style={{ padding: 4 }}>
-                <div>Segunda</div>
-                <div>e Quarta</div>
+                <div>Arlen</div>
               </div>
             ),
-            value: 'summer',
+            value: 'Arlen',
           },
           {
             label: (
               <div style={{ padding: 4 }}>
-                <div>Terça e</div>
-                <div>Quinta</div>
+                <div>André</div>
               </div>
             ),
-            value: 'autumn',
+            value: 'André',
           },
           {
             label: (
               <div style={{ padding: 4 }}>
-                <div>Outros</div>
+                <div>Iury</div>
               </div>
             ),
-            value: 'winter',
+            value: 'Iury',
           },
         ]}
+        className="my-5"
+        onChange={e => setFiltroProfessor(e.toString())}
       />
+      <br />
 
-      {data && <Collapse>
-        <Collapse.Panel header='Arclo' key='Arclo'>
+      {isFetching && <Card loading style={{ width: '100%' }}></Card>}
+      {filteredData && <Collapse className="my-5">
+        <Collapse.Panel header={`Arclo (${filteredData.filter(t => t.sede === 'Arclo').length})`} key='Arclo'>
           <List
             itemLayout="horizontal"
-            dataSource={data.filter(t => t.sede === 'Arclo')}
-            renderItem={(turma, index) => (
+            dataSource={filteredData.filter(t => t.sede === 'Arclo')}
+            renderItem={(turma) => (
               <List.Item>
                 <Link to={turma.id?.toString() || ''} className=''>
                   <>
-                    {turma.dia} |
-                    {formatDate(turma.horario, 'time')} |
-                    {turma.professor}
+                    {[turma.dia, formatDate(turma.horario, 'time'), turma.professor].join('  |  ')}
                   </>
                 </Link>
               </List.Item>
@@ -72,17 +116,15 @@ export default function TurmasIndex() {
           />
         </Collapse.Panel>
 
-        <Collapse.Panel header='Viva Esportes' key='Viva Esportes'>
+        <Collapse.Panel header={`Viva Esportes (${filteredData.filter(t => t.sede === 'Viva Esportes').length})`} key='Viva Esportes'>
           <List
             itemLayout="horizontal"
-            dataSource={data.filter(t => t.sede === 'Viva Esportes')}
-            renderItem={(turma, index) => (
+            dataSource={filteredData.filter(t => t.sede === 'Viva Esportes')}
+            renderItem={(turma) => (
               <List.Item>
                 <Link to={turma.id?.toString() || ''} className=''>
                   <>
-                    {turma.dia} |
-                    {formatDate(turma.horario, 'time')} |
-                    {turma.professor}
+                    {[turma.dia, formatDate(turma.horario, 'time'), turma.professor].join('  |  ')}
                   </>
                 </Link>
               </List.Item>

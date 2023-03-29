@@ -66,6 +66,7 @@ export const tAlunoShowSchema = z.object({
   expo_push_token: z.string().nullable(),
   desconto: z.number().nullable(),
   dia_vencimento: z.number(),
+  turmas: z.array(tTurmaShowSchema)
 })
 
 export const tAlunoIndexSchema = z.array(tAlunoShowSchema)

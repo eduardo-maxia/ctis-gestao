@@ -1,0 +1,33 @@
+.ctis-menu {
+  width: 256px;
+  padding-top: 100px;
+  background-color: #f1f1f1;
+}
+
+.ctis-container {
+ background-color: #f4f4f442;
+}
+
+.ant-segmented-item-selected, .ant-segmented-thumb {
+  background-color: #d4d9d9 !important;
+}
+
+.ant-menu-item-selected {
+  background-color: #c5e2f7 !important;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 1023px) {
+  .ctis-menu {
+    width: 100%;
+    padding-top: 0;
+
+    display: flex;
+    justify-content: center;
+  }
+
+  .ctis-container {
+    display: flex;
+    flex-direction: column;
+  }
+}
