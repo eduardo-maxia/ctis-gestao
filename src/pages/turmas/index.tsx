@@ -1,4 +1,4 @@
-import { Collapse, List, Segmented, Button, Card } from "antd"
+import { Collapse, List, Segmented, Button, Card, Descriptions } from "antd"
 import { tTurmaIndexSchema } from "schemas/schemas";
 import { useGetSchema } from "utils/requests"
 import { formatDate } from "utils/general";
@@ -107,9 +107,11 @@ export default function TurmasIndex() {
             renderItem={(turma) => (
               <List.Item>
                 <Link to={turma.id?.toString() || ''} className=''>
-                  <>
-                    {[turma.dia, formatDate(turma.horario, 'time'), turma.professor].join('  |  ')}
-                  </>
+                  <Descriptions bordered>
+                    <Descriptions.Item label="Sede">{turma.sede}</Descriptions.Item>
+                    <Descriptions.Item label="Dias">{turma.dia}</Descriptions.Item>
+                    <Descriptions.Item label="Horário">{formatDate(turma.horario, 'time')}</Descriptions.Item>
+                  </Descriptions>
                 </Link>
               </List.Item>
             )}
@@ -123,9 +125,11 @@ export default function TurmasIndex() {
             renderItem={(turma) => (
               <List.Item>
                 <Link to={turma.id?.toString() || ''} className=''>
-                  <>
-                    {[turma.dia, formatDate(turma.horario, 'time'), turma.professor].join('  |  ')}
-                  </>
+                  <Descriptions bordered>
+                    <Descriptions.Item label="Sede">{turma.sede}</Descriptions.Item>
+                    <Descriptions.Item label="Dias">{turma.dia}</Descriptions.Item>
+                    <Descriptions.Item label="Horário">{formatDate(turma.horario, 'time')}</Descriptions.Item>
+                  </Descriptions>
                 </Link>
               </List.Item>
             )}

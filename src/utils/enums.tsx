@@ -3,9 +3,11 @@ import { Select } from "antd"
 export const Professor: ('Arlen' | 'André' | 'Iury')[] = ['Arlen', 'André', 'Iury']
 export const Sede: ('Arclo' | 'Viva Esportes')[] = ['Arclo', 'Viva Esportes']
 export const Dias: ('Segunda e Quarta' | 'Terça e Quinta' | 'Outros')[] = ['Segunda e Quarta', 'Terça e Quinta', 'Outros']
+export const TipoPagamentos: ('Pix' | 'Cartão' | 'Dinheiro' | 'Pix por fora')[] = ['Pix', 'Cartão', 'Dinheiro', 'Pix por fora']
+export const StatusPagamentos: ('Gerado' | 'Pendente' | 'Pago')[] = ['Gerado', 'Pendente', 'Pago']
 
 type TInput = {
-  tipo: 'professor' | 'sede' | 'dias',
+  tipo: 'professor' | 'sede' | 'dias' | 'tipo_pagamentos' | 'status_pagamentos',
   value: string,
   onChange: (v: string) => void,
   className?: string,
@@ -31,6 +33,11 @@ export function EnumPicker({ tipo, value, onChange, className = 'block w-full ro
 
       case 'sede':
         return getOptionsByEnum(Sede);
+
+      case 'tipo_pagamentos':
+        return getOptionsByEnum(TipoPagamentos);
+      case 'status_pagamentos':
+        return getOptionsByEnum(StatusPagamentos);
 
       default:
         break;

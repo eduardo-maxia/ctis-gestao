@@ -3,7 +3,7 @@ import { cloneDeep } from "lodash"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { tAlunoIndexSchema } from "schemas/schemas"
-import { fuzzyStringMatcher } from "utils/general"
+import { formatDate, fuzzyStringMatcher } from "utils/general"
 import { useGetSchema } from "utils/requests"
 
 export default function AlunosIndex() {
@@ -34,7 +34,9 @@ export default function AlunosIndex() {
                   <Descriptions.Item label="Nome">{aluno.name}</Descriptions.Item>
                   <Descriptions.Item label="Telefone">{aluno.telefone}</Descriptions.Item>
                   <Descriptions.Item label="Dia de vencimento">{aluno.dia_vencimento}</Descriptions.Item>
-                  <Descriptions.Item label="Turmas">{aluno.turmas?.map(t => [t.dia, t.horario].join(' | '))}</Descriptions.Item>
+                  {aluno.turmas?.map(t => (
+                    <Descriptions.Item label={t.sede}>{t.dia} | {formatDate(t.horario, 'time')}</Descriptions.Item>
+                  ))}
                 </Descriptions>
               </Link>
             </Card>

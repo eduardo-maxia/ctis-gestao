@@ -8,6 +8,8 @@ import { tAlunoShowSchema } from "schemas/schemas";
 import { cloneDeep } from "lodash";
 import { diff } from "deep-object-diff";
 import BotaoVoltar from "components/BotaoVoltar";
+import { formatDate } from "utils/general";
+import { RightCircleOutlined } from '@ant-design/icons';
 
 export default function AlunosShow() {
   const { user_id } = useParams()
@@ -103,7 +105,7 @@ export default function AlunosShow() {
 
       <Descriptions title="Turmas" bordered className="my-3">
         {data?.turmas?.map(t => (
-          <Descriptions.Item label={t.sede}>{t.dia} | {t.horario}</Descriptions.Item>
+          <Descriptions.Item label={t.sede}>{t.dia} | {formatDate(t.horario, 'time')}</Descriptions.Item>
         ))}
         {!data?.turmas?.length && <div>Nenhuma turma.</div>}
       </Descriptions>
@@ -111,8 +113,8 @@ export default function AlunosShow() {
       <Descriptions title="Pagamentos" bordered className="my-3">
         {data?.pagamentos?.sort((a, b) => a.month_id - b.month_id).map(({ mes, status, valor, data_pagamento, id }) => (
           <Descriptions.Item label={mes}>
-            R$ {valor},00 | {status} | {data_pagamento}
-            <Link to={"/pagamentos/" + id}>Ícone</Link>
+            R$ {valor},00 | {status} | {formatDate(data_pagamento, 'date')}
+            <Link to={"/pagamentos/" + id}><RightCircleOutlined style={{ color: '#4c4c4c' }} /></Link>
           </Descriptions.Item>
         ))}
         {!data?.pagamentos?.length && <div>Nenhum pagamento.</div>}

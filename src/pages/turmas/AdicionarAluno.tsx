@@ -25,7 +25,7 @@ export default function AdicionarAluno() {
     return fuzzyStringMatcher(inputValue, [option.description])
   }
 
-  const selectedIds = data?.filter(a => a.turmas.filter(t => t.id?.toString() === turma_id).length > 0).map(a => a.id.toString())
+  const selectedIds = data?.filter(a => !!a.turmas?.filter(t => t.id?.toString() === turma_id).length).map(a => a.id.toString())
   useEffect(() => {
     selectedIds && setTargetKeys(selectedIds)
   }, [data])
@@ -43,7 +43,7 @@ export default function AdicionarAluno() {
               key: aluno.id.toString(),
               title: [aluno.apelido, aluno.name, aluno.telefone].join('  |  '),
               description: [aluno.apelido, aluno.name, aluno.telefone].join('  |  '),
-              chosen: aluno.turmas.filter(t => t.id?.toString() === turma_id).length > 0
+              chosen: !!aluno.turmas?.filter(t => t.id?.toString() === turma_id).length
             }))}
             showSearch
             filterOption={filterOption}
