@@ -1,4 +1,4 @@
-import { Button, Card, Input, List } from "antd"
+import { Button, Card, Descriptions, Input, List } from "antd"
 import { cloneDeep } from "lodash"
 import { useState } from "react"
 import { Link } from "react-router-dom"
@@ -21,19 +21,24 @@ export default function AlunosIndex() {
       {data &&
         <List
           style={{
-            maxHeight: '80vh',
+            maxHeight: '70vh',
             overflowY: 'auto'
           }}
+          className="mb-2 px-2"
           itemLayout="horizontal"
           dataSource={filteredData}
           renderItem={(aluno, index) => (
             <Card className="my-3">
               <Link to={aluno.id?.toString() || ''} className=''>
-                <>
-                  {['Apelido: ' + aluno.apelido, 'Nome: ' + aluno.name, 'Telefone: ' + aluno.telefone].join('  |  ')}
-                </>
+                <Descriptions title={aluno.apelido} bordered>
+                  <Descriptions.Item label="Nome">{aluno.name}</Descriptions.Item>
+                  <Descriptions.Item label="Telefone">{aluno.telefone}</Descriptions.Item>
+                  <Descriptions.Item label="Dia de vencimento">{aluno.dia_vencimento}</Descriptions.Item>
+                  <Descriptions.Item label="Turmas">{aluno.turmas?.map(t => [t.dia, t.horario].join(' | '))}</Descriptions.Item>
+                </Descriptions>
               </Link>
             </Card>
+
           )}
         />}
 

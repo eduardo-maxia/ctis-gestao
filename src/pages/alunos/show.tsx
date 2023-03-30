@@ -1,9 +1,9 @@
-import { DatePicker, Select, Checkbox, Input, Card, Button } from "antd";
+import { DatePicker, Select, Checkbox, Input, Card, Button, Descriptions } from "antd";
 import { Field, Form, Formik, useField } from "formik";
 import { useState } from "react";
 import dayjs from "dayjs"
 import { useGetSchema, usePatch, usePost } from "utils/requests";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { tAlunoShowSchema } from "schemas/schemas";
 import { cloneDeep } from "lodash";
 import { diff } from "deep-object-diff";
@@ -12,6 +12,7 @@ import BotaoVoltar from "components/BotaoVoltar";
 export default function AlunosShow() {
   const { user_id } = useParams()
   const { data, isFetching } = useGetSchema('users/' + user_id, tAlunoShowSchema)
+  console.log("🚀 ~ file: show.tsx:15 ~ AlunosShow ~ data:", data)
   const { mutate, isLoading } = usePatch('users/' + user_id)
   const navigate = useNavigate()
   const [disabled, setDisabled] = useState(true)
@@ -34,8 +35,8 @@ export default function AlunosShow() {
         }) => (
           <Form>
             <div className="md:col-span-2 md:mt-0">
-              <div className="overflow-hidden shadow sm:rounded-md">
-                <div className="bg-white px-4 py-5 sm:p-6">
+              <div className="overflow-hidden sm:rounded-md">
+                <div className="py-5 sm:p-6">
                   <div className="grid grid-cols-6 gap-6">
                     <BotaoVoltar />
 
@@ -79,13 +80,43 @@ export default function AlunosShow() {
                 </div>
                 <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
                   <button type="submit" disabled={isLoading}
-                    className="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Save</button>
+                    className="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Salvar</button>
                 </div>
               </div>
             </div>
           </Form>
         )}
       </Formik>}
+
+      <Descriptions title="Informações" bordered className="my-3">
+        <Descriptions.Item label="Contato de Emergência">{data?.contato_emergencia_nome} | {data?.contato_emergencia_telefone}</Descriptions.Item>
+        <Descriptions.Item label="CEP">{data?.cep}</Descriptions.Item>
+        <Descriptions.Item label="Endereço">{data?.endereco}</Descriptions.Item>
+        <Descriptions.Item label="Data Nascimento">{data?.data_nascimento}</Descriptions.Item>
+        <Descriptions.Item label="Alergias">{data?.alergias}</Descriptions.Item>
+        <Descriptions.Item label="Email">{data?.email}</Descriptions.Item>
+        <Descriptions.Item label="Responsável">{data?.responsavel_nome} | {data?.responsavel_parentesco} | {data?.responsavel_telefone}</Descriptions.Item>
+        <Descriptions.Item label="Camisa">{data?.tamanho_camisa}</Descriptions.Item>
+        <Descriptions.Item label="Pé">{data?.tamanho_pe}</Descriptions.Item>
+        <Descriptions.Item label="Tipo Sanguíneo">{data?.tipo_sanguineo}</Descriptions.Item>
+      </Descriptions>
+
+      <Descriptions title="Turmas" bordered className="my-3">
+        {data?.turmas?.map(t => (
+          <Descriptions.Item label={t.sede}>{t.dia} | {t.horario}</Descriptions.Item>
+        ))}
+        {!data?.turmas?.length && <div>Nenhuma turma.</div>}
+      </Descriptions>
+
+      <Descriptions title="Pagamentos" bordered className="my-3">
+        {data?.pagamentos?.sort((a, b) => a.month_id - b.month_id).map(({ mes, status, valor, data_pagamento, id }) => (
+          <Descriptions.Item label={mes}>
+            R$ {valor},00 | {status} | {data_pagamento}
+            <Link to={"/pagamentos/" + id}>Ícone</Link>
+          </Descriptions.Item>
+        ))}
+        {!data?.pagamentos?.length && <div>Nenhum pagamento.</div>}
+      </Descriptions>
     </div >
   )
 }
