@@ -81,3 +81,10 @@ export const tAlunoShowSchema = z.object({
 })
 
 export const tAlunoIndexSchema = z.array(tAlunoShowSchema)
+
+export const tMonthsIndexSchema = z.array(z.object({
+  id: z.number(),
+  mes_numero: z.number(),
+  mes: z.string(),
+  ano: z.string()
+}))

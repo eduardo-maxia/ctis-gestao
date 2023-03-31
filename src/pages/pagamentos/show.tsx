@@ -9,12 +9,14 @@ import { usePost } from "utils/requests";
 import { useNavigate } from "react-router-dom";
 import BotaoVoltar from "components/BotaoVoltar";
 import { isEqual } from "lodash";
+import { tMonthsIndexSchema } from "schemas/schemas";
 
 export default function PagamentosShow() {
   const { pagamento_id } = useParams()
   const { data, isLoading } = useGetSchema('pagamentos/' + pagamento_id)
+  const { data: meses } = useGetSchema('months', tMonthsIndexSchema)
+  const mesesProximos = meses?.slice(data.month.id - 3, data.month.id + 3)
   const [disabled, setDisabled] = useState(true)
-  console.log("🚀 ~ file: show.tsx:7 ~ PagamentosShow ~ data:", data)
   return (
     <div className="text-start">
       {data && <Formik
@@ -43,7 +45,11 @@ export default function PagamentosShow() {
 
                     <div className="col-span-6 sm:col-span-2">
                       <label className="block text-sm font-medium leading-6 text-gray-900">Mês:</label>
-                      Select Meses
+                      <Select disabled={disabled} className="block w-full rounded-md border-0 pb-1.5">
+                        {mesesProximos?.map(m => (
+                          <Select.Option key={m.id} value={m.id}>{m.mes_numero}/{m.ano}</Select.Option>
+                        ))}
+                      </Select>
                     </div>
 
                     <div className="col-span-6 sm:col-span-2">

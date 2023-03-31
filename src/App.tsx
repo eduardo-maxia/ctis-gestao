@@ -44,6 +44,8 @@ function App() {
           <>
             {/* Authenticated */}
             <Route path='/' element={<Container />}>
+              <Route index element={<PagamentosIndex />} />
+
               <Route path='turmas' element={<Outlet />}>
                 <Route index element={<TurmasIndex />} />
                 <Route path='create' element={<TurmasCreate />} />
